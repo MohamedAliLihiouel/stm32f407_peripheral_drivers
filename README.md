@@ -1,4 +1,4 @@
-##STM32F407 Driver Development
+## STM32F407 Driver Development
 	Low-level peripheral driver development for the **STM32F407VG** on the STM32F4 Discovery board using C and STM32CubeIDE.
 
 ## CP1 — STM32CubeIDE Baseline
