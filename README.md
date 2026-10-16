@@ -8,7 +8,7 @@
 	- Build and debug environment
 
 ## CP2 — GPIO Driver and External Interrupts
-Custom register-level GPIO driver for the ARM Cortex-M4:
+	Custom register-level GPIO driver for the ARM Cortex-M4:
 	- GPIO initialization and clock control
 	- Digital input/output and pin toggling
 	- GPIO modes, speed, output type, and pull configuration
@@ -16,7 +16,7 @@ Custom register-level GPIO driver for the ARM Cortex-M4:
 	- EXTI configuration and interrupt handling
 	- NVIC interrupt enable/disable and priority configuration
 
-Applications: Button polling and button-triggered LED toggling using external interrupts.
+	Applications: Button polling and button-triggered LED toggling using external interrupts.
 
 ## Next Checkpoint
 	CP3 — SPI Driver Development:
