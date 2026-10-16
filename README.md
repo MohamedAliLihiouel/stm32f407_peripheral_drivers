@@ -1,49 +1,23 @@
-STM32F407 Driver Development
-Checkpoint 1 — STM32CubeIDE Baseline
+##STM32F407 Driver Development
+	Low-level peripheral driver development for the **STM32F407VG** on the STM32F4 Discovery board using C and STM32CubeIDE.
 
-1) Overview:
-	This checkpoint establishes the initial STM32F407 development environment using STM32CubeIDE. 
-	It serves as the clean baseline for the step-by-step implementation of low-level peripheral drivers.
-	The project is intended as a learning and experimentation platform for embedded software development on ARM Cortex-M4 microcontrollers.
+## CP1 — STM32CubeIDE Baseline
+	- Project setup and target configuration
+	- Startup code and system initialization
+	- Flash/RAM linker configuration
+	- Build and debug environment
 
-2) Hardware:
-	* Microcontroller: STM32F407VG
-	* Board: STM32F4 Discovery
-	* Core: ARM Cortex-M4
-	* IDE: STM32CubeIDE
+## CP2 — GPIO Driver and External Interrupts
+Custom register-level GPIO driver for the ARM Cortex-M4:
+	- GPIO initialization and clock control
+	- Digital input/output and pin toggling
+	- GPIO modes, speed, output type, and pull configuration
+	- Alternate-function configuration
+	- EXTI configuration and interrupt handling
+	- NVIC interrupt enable/disable and priority configuration
 
-3) Language: C
+Applications: Button polling and button-triggered LED toggling using external interrupts.
 
-4) Project Scope
-This checkpoint focuses on establishing a working project structure and verifying the basic build and debug workflow.
-Included:
-	* Initial STM32CubeIDE project
-	* Startup assembly file
-	* Linker scripts for Flash and RAM
-	* System initialization files
-	* Basic build and debug configuration
-
-Not included:
-	* Custom GPIO driver
-	* Custom EXTI driver
-	* SPI, UART, I2C, or CAN drivers
-	* Peripheral-specific test applications
-
-5) Project Structure:
-	stm32f407_peripheral_drivers/
-	├── Inc/
-	├── Src/
-	├── Startup/
-	├── Debug/
-	├── STM32F407VG_FLASH.ld
-	├── STM32F407VG_RAM.ld
-	└── README.md
-
-Note: The directory structure may evolve as the project grows.
-
-6) Build and Debug:
-	* Import the project into STM32CubeIDE.
-	* Select the STM32F407VG target configuration.
-	* Build the project.
-	* Connect the STM32F4 Discovery board using ST-LINK.
-	* Flash the firmware and start a debug session.
+## Next Checkpoint
+	CP3 — SPI Driver Development:
+	Implement a polling-based SPI driver for peripheral communication.
