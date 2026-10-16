@@ -17,6 +17,8 @@
  */
 
 #include <stdint.h>
+#include <stm32f407_LedToggle_ButtonB1.h>
+#include <stm32f407_LedToggle_ButtonB1_Interupt.h>
 
 #if !defined(__SOFT_FP__) && defined(__ARM_FP)
   #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
@@ -24,6 +26,15 @@
 
 int main(void)
 {
+#if((STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON) || (STM32F407_LEDTOGGLE_BUTTONB1_INTERUPT == STD_ON))
+	GPIO_ConfigAll();
+#endif
+
     /* Loop forever */
-	for(;;);
+	while (1)
+	{
+#if(STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON)
+		Button_CheckAndToggleLED();
+#endif
+	};
 }
