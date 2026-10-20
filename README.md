@@ -18,6 +18,8 @@
 
 	Applications: Button polling and button-triggered LED toggling using external interrupts.
 
-## Next Checkpoint
-	CP3 — SPI Driver Development:
-	Implement a polling-based SPI driver for peripheral communication.
+## CP3 — SPI Driver Development
+	- Implement a register-level SPI driver
+	- Configure SPI mode, clock, data frame, and GPIO alternate functions
+	- Implement polling-based 8-bit and 16-bit data transmission
+	- Develop an SPI2 master transmit application
