@@ -17,24 +17,49 @@
  */
 
 #include <stdint.h>
-#include <stm32f407_LedToggle_ButtonB1.h>
-#include <stm32f407_LedToggle_ButtonB1_Interupt.h>
 
-#if !defined(__SOFT_FP__) && defined(__ARM_FP)
-  #warning "FPU is not initialized, but the project is compiling for an FPU. Please initialize the FPU before use."
-#endif
+#include "app_spi_master_tx.h"
+#include "stm32f407_LedToggle_ButtonB1.h"
+#include "stm32f407_LedToggle_ButtonB1_Interupt.h"
+#include "stm32f407_GPIO_driver.h"
+#include "stm32f407_SPI_driver.h"
 
+/**
+ * @brief  Application entry point.
+ * @retval int Application exit status (the function runs indefinitely).
+ */
 int main(void)
 {
-#if((STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON) || (STM32F407_LEDTOGGLE_BUTTONB1_INTERUPT == STD_ON))
-	GPIO_ConfigAll();
+    /*
+     * Configure GPIOs for the LED and button application when enabled.
+     * The configuration call is currently commented out.
+     */
+#if ((STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON) || (STM32F407_LEDTOGGLE_BUTTONB1_INTERUPT == STD_ON))
+    GPIO_ConfigAll();
 #endif
 
-    /* Loop forever */
-	while (1)
-	{
-#if(STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON)
-		Button_CheckAndToggleLED();
+    /*
+     * SPI master transmit application:
+     * 1. Configure GPIO pins for the SPI peripheral.
+     * 2. Initialize the SPI peripheral and its operating parameters.
+     * 3. Transmit the configured data.
+     */
+#if (APP_SPI_MASTER_TX == STD_ON)
+    SPI_ConfigGPIOPins();
+    SPI_ConfigAll();
+    SPI_MasterSendData();
 #endif
-	};
+
+    /* Main application loop: keep the MCU running. */
+    while (1)
+    {
+        /*
+         * Check the button state and toggle the LED when the polling-based
+         * LED/button application is enabled.
+         * This function call is currently commented out.
+         */
+#if (STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON)
+        Button_CheckAndToggleLED();
+#endif
+    }
 }
