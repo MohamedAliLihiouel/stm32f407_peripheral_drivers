@@ -19,6 +19,7 @@
 #include <stdint.h>
 
 #include "app_spi_master_tx.h"
+#include "app_spi_interrupt.h"
 #include "stm32f407_LedToggle_ButtonB1.h"
 #include "stm32f407_LedToggle_ButtonB1_Interupt.h"
 #include "stm32f407_GPIO_driver.h"
@@ -50,9 +51,26 @@ int main(void)
     SPI_MasterSendData();
 #endif
 
+    /*
+     * SPI master transmit application:
+     * 1. Configure GPIO pins for the SPI peripheral.
+     * 2. Initialize the SPI peripheral and its operating parameters..
+     */
+#if (APP_SPI_INTERRUPT == STD_ON)
+    SPI_Int_ConfigGPIOPins();
+    SPI_Int_ConfigAll();
+#endif
+
     /* Main application loop: keep the MCU running. */
     while (1)
     {
+#if (APP_SPI_INTERRUPT == STD_ON)
+	/*
+	 * SPI master transmit application:
+	 * Transmit the configured data when the button is pressed
+	 */
+	SPI_Int_MasterSendData();
+#endif
         /*
          * Check the button state and toggle the LED when the polling-based
          * LED/button application is enabled.
