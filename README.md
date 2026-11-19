@@ -23,3 +23,8 @@
 	- Configure SPI mode, clock, data frame, and GPIO alternate functions
 	- Implement polling-based 8-bit and 16-bit data transmission
 	- Develop an SPI2 master transmit application
+
+## CP4 – Interrupt-Driven SPI Communication
+	- Implemented interrupt-driven SPI transmission and reception, including centralized interrupt handling and error management.
+	- Added an SPI application demonstrating asynchronous master communication triggered by a push button, with LED-based error indication.
+	- Integrated the SPI interrupt application into the main project and performed related code and project structure updates.
