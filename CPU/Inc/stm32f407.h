@@ -93,7 +93,14 @@
 #define IRQ_NO_EXTI3          9U  /*!< EXTI line 3 interrupt. */
 #define IRQ_NO_EXTI4          10U /*!< EXTI line 4 interrupt. */
 #define IRQ_NO_EXTI9_5        23U /*!< Shared interrupt for EXTI lines 5-9. */
+#define IRQ_NO_I2C1_EV        31U /*!< I2C1 event interrupt. */
+#define IRQ_NO_I2C1_ER        32U /*!< I2C1 error interrupt. */
+#define IRQ_NO_I2C2_EV        33U /*!< I2C2 event interrupt. */
+#define IRQ_NO_I2C2_ER        34U /*!< I2C2 error interrupt. */
+#define IRQ_NO_SPI1           35U /*!< SPI1 global interrupt. */
+#define IRQ_NO_SPI2           36U /*!< SPI2 global interrupt. */
 #define IRQ_NO_EXTI15_10      40U /*!< Shared interrupt for EXTI lines 10-15. */
+#define IRQ_NO_SPI3           51U /*!< SPI3 global interrupt. */
 
 /** @} */
 
@@ -399,42 +406,6 @@ typedef struct
     volatile uint32_t PR;     /*!< Pending register. Offset: 0x14. */
 } EXTI_Registers_t;
 
-
-/**
- * @brief GPIO peripheral register layout.
- *
- * @details
- * Represents the memory-mapped registers of a GPIO port, arranged in
- * hardware address order.
- *
- * Each port provides pin mode, output type, speed, pull configuration,
- * input/output data, bit set/reset, configuration locking, and alternate
- * function selection registers.
- */
-typedef struct
-{
-    volatile uint32_t MODER;    /*!< GPIO port mode register. Offset: 0x00. */
-    volatile uint32_t OTYPER;   /*!< GPIO port output type register.
-                                     Offset: 0x04. */
-    volatile uint32_t OSPEEDR;  /*!< GPIO port output speed register.
-                                     Offset: 0x08. */
-    volatile uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register.
-                                     Offset: 0x0C. */
-    volatile uint32_t IDR;      /*!< GPIO port input data register.
-                                     Offset: 0x10. */
-    volatile uint32_t ODR;      /*!< GPIO port output data register.
-                                     Offset: 0x14. */
-    volatile uint32_t BSRR;     /*!< GPIO port bit set/reset register.
-                                     Offset: 0x18. */
-    volatile uint32_t LCKR;     /*!< GPIO port configuration lock register.
-                                     Offset: 0x1C. */
-    volatile uint32_t AFRL;     /*!< GPIO alternate function low register.
-                                     Offset: 0x20. */
-    volatile uint32_t AFRH;     /*!< GPIO alternate function high register.
-                                     Offset: 0x24. */
-} GPIO_Registers_t;
-
-
 /**
  * @brief RCC peripheral register layout.
  *
@@ -501,6 +472,102 @@ typedef struct
                                         Offset: 0x84. */
 } RCC_Registers_t;
 
+/**
+ * @brief GPIO peripheral register layout.
+ *
+ * @details
+ * Represents the memory-mapped registers of a GPIO port, arranged in
+ * hardware address order.
+ *
+ * Each port provides pin mode, output type, speed, pull configuration,
+ * input/output data, bit set/reset, configuration locking, and alternate
+ * function selection registers.
+ */
+typedef struct
+{
+    volatile uint32_t MODER;    /*!< GPIO port mode register. Offset: 0x00. */
+    volatile uint32_t OTYPER;   /*!< GPIO port output type register. Offset: 0x04. */
+    volatile uint32_t OSPEEDR;  /*!< GPIO port output speed register. Offset: 0x08. */
+    volatile uint32_t PUPDR;    /*!< GPIO port pull-up/pull-down register. Offset: 0x0C. */
+    volatile uint32_t IDR;      /*!< GPIO port input data register. Offset: 0x10. */
+    volatile uint32_t ODR;      /*!< GPIO port output data register. Offset: 0x14. */
+    volatile uint32_t BSRR;     /*!< GPIO port bit set/reset register. Offset: 0x18. */
+    volatile uint32_t LCKR;     /*!< GPIO port configuration lock register. Offset: 0x1C. */
+    volatile uint32_t AFRL;     /*!< GPIO alternate function low register. Offset: 0x20. */
+    volatile uint32_t AFRH;     /*!< GPIO alternate function high register. Offset: 0x24. */
+} GPIO_Registers_t;
+
+/**
+ * @brief SPI peripheral register layout.
+ *
+ * @details
+ * Represents the memory-mapped registers of an SPI/I2S peripheral on the
+ * STM32F407. The registers are arranged according to their hardware offsets.
+ *
+ * The structure provides access to the SPI control, status, data, and CRC
+ * registers. Reserved fields preserve the register offsets defined by the
+ * hardware reference manual.
+ *
+ * @note Register offsets are relative to the SPI peripheral base address.
+ */
+typedef struct
+{
+    volatile uint32_t CR1;      /*!< SPI control register 1. Offset: 0x00. */
+    volatile uint32_t CR2;      /*!< SPI control register 2. Offset: 0x04. */
+    volatile uint32_t SR;       /*!< SPI status register. Offset: 0x08. */
+    volatile uint16_t DR;       /*!< SPI data register. Offset: 0x0C. */
+    uint16_t reserved0;         /*!< Reserved. Offset: 0x0E. */
+    volatile uint16_t CRCPR;    /*!< SPI CRC polynomial register. Offset: 0x10. */
+    uint16_t reserved1;         /*!< Reserved. Offset: 0x12. */
+    volatile uint16_t RXCRCR;   /*!< SPI RX CRC register. Offset: 0x14. */
+    uint16_t reserved2;         /*!< Reserved. Offset: 0x16. */
+    volatile uint16_t TXCRCR;   /*!< SPI TX CRC register. Offset: 0x18. */
+    uint16_t reserved3;         /*!< Reserved. Offset: 0x1A. */
+    /* volatile uint16_t I2SCFGR; */ /*!< I2S configuration register. Offset: 0x1C. */
+    /* uint16_t reserved4; */       /*!< Reserved. Offset: 0x1E. */
+    /* volatile uint16_t I2SPR; */  /*!< I2S prescaler register. Offset: 0x20. */
+    /* uint16_t reserved5; */       /*!< Reserved. Offset: 0x22. */
+} SPI_Registers_t;
+
+/**
+ * @brief I2C peripheral register layout.
+ *
+ * @details
+ * Represents the memory-mapped registers of the STM32F407 I2C peripheral.
+ * The registers are arranged according to their hardware offsets.
+ *
+ * The structure provides access to the I2C control, address, data, status,
+ * clock control, rise-time, and digital/analog filter configuration registers.
+ * Reserved fields preserve the register offsets defined by the hardware
+ * reference manual.
+ *
+ * @note Register offsets are relative to the I2C peripheral base address.
+ */
+typedef struct
+{
+    volatile uint16_t CR1;      /*!< I2C control register 1. Offset: 0x00. */
+    uint16_t reserved0;         /*!< Reserved. Offset: 0x02. */
+    volatile uint16_t CR2;      /*!< I2C control register 2. Offset: 0x04. */
+    uint16_t reserved1;         /*!< Reserved. Offset: 0x06. */
+    volatile uint16_t OAR1;     /*!< I2C own address register 1. Offset: 0x08. */
+    uint16_t reserved2;         /*!< Reserved. Offset: 0x0A. */
+    volatile uint16_t OAR2;     /*!< I2C own address register 2. Offset: 0x0C. */
+    uint16_t reserved3;         /*!< Reserved. Offset: 0x0E. */
+    volatile uint16_t DR;       /*!< I2C data register. Offset: 0x10. */
+    uint16_t reserved4;         /*!< Reserved. Offset: 0x12. */
+    volatile uint16_t SR1;      /*!< I2C status register 1. Offset: 0x14. */
+    uint16_t reserved5;         /*!< Reserved. Offset: 0x16. */
+    volatile uint16_t SR2;      /*!< I2C status register 2. Offset: 0x18. */
+    uint16_t reserved6;         /*!< Reserved. Offset: 0x1A. */
+    volatile uint16_t CCR;      /*!< I2C clock control register. Offset: 0x1C. */
+    uint16_t reserved7;         /*!< Reserved. Offset: 0x1E. */
+    volatile uint16_t TRISE;    /*!< I2C rise-time register. Offset: 0x20. */
+    uint16_t reserved8;         /*!< Reserved. Offset: 0x22. */
+    volatile uint16_t FLTR;     /*!< I2C noise control register. Offset: 0x24. */
+    uint16_t reserved9;         /*!< Reserved. Offset: 0x26. */
+} I2C_Registers_t;
+
+
 /** @} */
 
 
@@ -523,6 +590,9 @@ typedef struct
 #define SYSCFG ((SYSCFG_Registers_t*)SYSCFG_START_ADDRESS)
 #define EXTI   ((EXTI_Registers_t*)EXTI_START_ADDRESS)
 
+// Reset and clock control peripheral.
+#define RCC    ((RCC_Registers_t*)RCC_START_ADDRESS)
+
 // GPIO peripherals.
 #define GPIOA  (GPIO_Registers_t*)(GPIOA_START_ADDRESS)
 #define GPIOB  (GPIO_Registers_t*)(GPIOB_START_ADDRESS)
@@ -536,8 +606,17 @@ typedef struct
 #define GPIOJ  (GPIO_Registers_t*)(GPIOJ_START_ADDRESS)
 #define GPIOK  (GPIO_Registers_t*)(GPIOK_START_ADDRESS)
 
-// Reset and clock control peripheral.
-#define RCC    ((RCC_Registers_t*)RCC_START_ADDRESS)
+// SPI peripherals
+#define SPI1 (SPI_Registers_t*)(SPI1_START_ADDRESS)
+#define SPI2 (SPI_Registers_t*)(SPI2_START_ADDRESS)
+#define SPI3 (SPI_Registers_t*)(SPI3_START_ADDRESS)
+#define SPI4 (SPI_Registers_t*)(SPI4_START_ADDRESS)
+
+
+// I2C peripherals
+#define I2C1 (I2C_Registers_t*)I2C1_START_ADDRESS
+#define I2C2 (I2C_Registers_t*)I2C2_START_ADDRESS
+#define I2C3 (I2C_Registers_t*)I2C3_START_ADDRESS
 
 /** @} */
 
@@ -577,6 +656,120 @@ typedef struct
 #define RCC_GPIOI_CLK_DISABLE() (RCC->AHB1ENR &= ~(1 << 8))
 #define RCC_GPIOJ_CLK_DISABLE() (RCC->AHB1ENR &= ~(1 << 9))
 #define RCC_GPIOK_CLK_DISABLE() (RCC->AHB1ENR &= ~(1 << 10))
+
+
+
+
+/**
+ * @defgroup RCC_I2C_Clock_Control I2C Clock Control
+ * @brief Enable or disable the clocks of I2C peripherals.
+ * @{
+ */
+
+/* I2C clock enable macros. */
+#define RCC_I2C1_CLK_ENABLE() (RCC->APB1ENR |= (1 << 21))
+#define RCC_I2C2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 22))
+#define RCC_I2C3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 23))
+
+/* I2C clock disable macros. */
+#define RCC_I2C1_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 21))
+#define RCC_I2C2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 22))
+#define RCC_I2C3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 23))
+
+/** @} */
+
+
+/**
+ * @defgroup RCC_CAN_Clock_Control CAN Clock Control
+ * @brief Enable or disable the clocks of CAN peripherals.
+ * @{
+ */
+
+/* CAN clock enable macros. */
+#define RCC_CAN1_CLK_ENABLE() (RCC->APB1ENR |= (1 << 25))
+#define RCC_CAN2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 26))
+
+/* CAN clock disable macros. */
+#define RCC_CAN1_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 25))
+#define RCC_CAN2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 26))
+
+/** @} */
+
+
+/**
+ * @defgroup RCC_SPI_Clock_Control SPI Clock Control
+ * @brief Enable or disable the clocks of SPI peripherals.
+ * @{
+ */
+
+/* SPI clock enable macros. */
+#define RCC_SPI1_CLK_ENABLE() (RCC->APB2ENR |= (1 << 12))
+#define RCC_SPI2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 14))
+#define RCC_SPI3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 15))
+#define RCC_SPI4_CLK_ENABLE() (RCC->APB2ENR |= (1 << 13))
+
+/* SPI clock disable macros. */
+#define RCC_SPI1_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 12))
+#define RCC_SPI2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 14))
+#define RCC_SPI3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 15))
+#define RCC_SPI4_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 13))
+
+/** @} */
+
+/**
+ * @defgroup RCC_USART_Clock_Control USART Clock Control
+ * @brief Enable or disable the clocks of USART peripherals.
+ * @{
+ */
+
+/* USART clock enable macros. */
+#define RCC_USART1_CLK_ENABLE() (RCC->APB2ENR |= (1 << 4))
+#define RCC_USART2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 17))
+#define RCC_USART3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 18))
+#define RCC_USART6_CLK_ENABLE() (RCC->APB2ENR |= (1 << 5))
+
+/* USART clock disable macros. */
+#define RCC_USART1_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 4))
+#define RCC_USART2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 17))
+#define RCC_USART3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 18))
+#define RCC_USART6_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 5))
+
+/** @} */
+
+/**
+ * @defgroup RCC_UART_Clock_Control UART Clock Control
+ * @brief Enable or disable the clocks of UART peripherals.
+ * @{
+ */
+
+/* UART clock enable macros. */
+#define RCC_UART4_CLK_ENABLE() (RCC->APB1ENR |= (1 << 19))
+#define RCC_UART5_CLK_ENABLE() (RCC->APB1ENR |= (1 << 20))
+
+/* UART clock disable macros. */
+#define RCC_UART4_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 19))
+#define RCC_UART5_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 20))
+
+/** @} */
+
+
+/**
+ * @defgroup RCC_SYSCFG_Clock_Control SYSCFG Clock Control
+ * @brief Enable or disable the SYSCFG peripheral clock.
+ * @{
+ */
+
+/* SYSCFG clock enable macro. */
+#define RCC_SYSCFG_CLK_ENABLE() (RCC->APB2ENR |= (1 << 14))
+
+/* SYSCFG clock disable macro. */
+#define RCC_SYSCFG_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 14))
+
+/** @} */
+
+/******************************************************************************
+ * Reset peripheries Macros
+ ******************************************************************************/
 
 /**
  * @brief Generate a GPIO port reset sequence through the RCC peripheral.
@@ -657,115 +850,74 @@ typedef struct
 
 /** @} */
 
-
 /**
- * @defgroup RCC_I2C_Clock_Control I2C Clock Control
- * @brief Enable or disable the clocks of I2C peripherals.
- * @{
+ * @brief Generate a SPI peripheral reset sequence through the RCC peripheral.
+ *
+ * @details
+ * Each reset macro asserts the corresponding APBx peripheral reset bit
+ * and then clears it to release the peripheral from reset.
+ *
+ * The reset bit positions correspond to the SPI peripheral indices.
  */
 
-/* I2C clock enable macros. */
-#define RCC_I2C1_CLK_ENABLE() (RCC->APB1ENR |= (1 << 21))
-#define RCC_I2C2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 22))
-#define RCC_I2C3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 23))
+/* SPI peripheral reset macros. */
+#define RCC_SPI1_RESET()             \
+    do {                                   \
+        RCC->APB2RSTR |=  (1U << 12);      /* Assert reset */   \
+        RCC->APB2RSTR &= ~(1U << 12);      /* Release reset */  \
+    } while (0)
 
-/* I2C clock disable macros. */
-#define RCC_I2C1_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 21))
-#define RCC_I2C2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 22))
-#define RCC_I2C3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 23))
+#define RCC_SPI2_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 14);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 14);      /* Release reset */  \
+    } while (0)
+
+#define RCC_SPI3_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 15);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 15);      /* Release reset */  \
+    } while (0)
+
+#define RCC_SPI4_RESET()             \
+    do {                                   \
+        RCC->APB2RSTR |=  (1U << 13);      /* Assert reset */   \
+        RCC->APB2RSTR &= ~(1U << 13);      /* Release reset */  \
+    } while (0)
 
 /** @} */
 
-
 /**
- * @defgroup RCC_CAN_Clock_Control CAN Clock Control
- * @brief Enable or disable the clocks of CAN peripherals.
- * @{
+ * @brief Generate a I2C peripheral reset sequence through the RCC peripheral.
+ *
+ * @details
+ * Each reset macro asserts the corresponding APBx peripheral reset bit
+ * and then clears it to release the peripheral from reset.
+ *
+ * The reset bit positions correspond to the I2C peripheral indices.
  */
 
-/* CAN clock enable macros. */
-#define RCC_CAN1_CLK_ENABLE() (RCC->APB1ENR |= (1 << 25))
-#define RCC_CAN2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 26))
+/* SPI peripheral reset macros. */
+#define RCC_I2C1_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 21);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 21);      /* Release reset */  \
+    } while (0)
 
-/* CAN clock disable macros. */
-#define RCC_CAN1_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 25))
-#define RCC_CAN2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 26))
+#define RCC_I2C2_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 22);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 22);      /* Release reset */  \
+    } while (0)
+
+#define RCC_I2C3_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 23);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 23);      /* Release reset */  \
+    } while (0)
 
 /** @} */
 
-
-/**
- * @defgroup RCC_SPI_Clock_Control SPI Clock Control
- * @brief Enable or disable the clocks of SPI peripherals.
- * @{
- */
-
-/* SPI clock enable macros. */
-#define RCC_SPI1_CLK_ENABLE() (RCC->APB2ENR |= (1 << 12))
-#define RCC_SPI2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 14))
-#define RCC_SPI3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 15))
-#define RCC_SPI4_CLK_ENABLE() (RCC->APB2ENR |= (1 << 13))
-
-/* SPI clock disable macros. */
-#define RCC_SPI1_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 12))
-#define RCC_SPI2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 14))
-#define RCC_SPI3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 15))
-#define RCC_SPI4_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 13))
-
-/** @} */
-
-
-/**
- * @defgroup RCC_USART_Clock_Control USART Clock Control
- * @brief Enable or disable the clocks of USART peripherals.
- * @{
- */
-
-/* USART clock enable macros. */
-#define RCC_USART1_CLK_ENABLE() (RCC->APB2ENR |= (1 << 4))
-#define RCC_USART2_CLK_ENABLE() (RCC->APB1ENR |= (1 << 17))
-#define RCC_USART3_CLK_ENABLE() (RCC->APB1ENR |= (1 << 18))
-#define RCC_USART6_CLK_ENABLE() (RCC->APB2ENR |= (1 << 5))
-
-/* USART clock disable macros. */
-#define RCC_USART1_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 4))
-#define RCC_USART2_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 17))
-#define RCC_USART3_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 18))
-#define RCC_USART6_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 5))
-
-/** @} */
-
-
-/**
- * @defgroup RCC_UART_Clock_Control UART Clock Control
- * @brief Enable or disable the clocks of UART peripherals.
- * @{
- */
-
-/* UART clock enable macros. */
-#define RCC_UART4_CLK_ENABLE() (RCC->APB1ENR |= (1 << 19))
-#define RCC_UART5_CLK_ENABLE() (RCC->APB1ENR |= (1 << 20))
-
-/* UART clock disable macros. */
-#define RCC_UART4_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 19))
-#define RCC_UART5_CLK_DISABLE() (RCC->APB1ENR &= ~(1 << 20))
-
-/** @} */
-
-
-/**
- * @defgroup RCC_SYSCFG_Clock_Control SYSCFG Clock Control
- * @brief Enable or disable the SYSCFG peripheral clock.
- * @{
- */
-
-/* SYSCFG clock enable macro. */
-#define RCC_SYSCFG_CLK_ENABLE() (RCC->APB2ENR |= (1 << 14))
-
-/* SYSCFG clock disable macro. */
-#define RCC_SYSCFG_CLK_DISABLE() (RCC->APB2ENR &= ~(1 << 14))
-
-/** @} */
 
 
 #endif /* INC_STM32F407_H_ */
