@@ -150,6 +150,7 @@ void SPI_ConfigAll(void)
     	SPI_PeriClkCtrl(spiConfig[i].pSPIx_StartAddr, ENABLE);
     	SPI_Init(&spiConfig[i]);
     }
+	/* This makes NSS signal internally high to avoid MODF error */
     SPI_SSIConfig(SPI2, ENABLE);
 }
 
