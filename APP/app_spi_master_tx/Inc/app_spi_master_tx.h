@@ -18,7 +18,7 @@
 
 #include "stm32f407_SPI_driver.h"
 
-#define APP_SPI_MASTER_TX STD_ON
+#define APP_SPI_MASTER_TX STD_OFF
 
 #if (APP_SPI_MASTER_TX == STD_ON)
 extern void SPI_ConfigGPIOPins(void);
