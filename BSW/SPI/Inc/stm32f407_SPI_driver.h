@@ -1,13 +1,17 @@
 /*
- * stm32f407_SPI_driver.h
+- File: stm32f407_SPI_driver.h
  *
- *  Created on: Oct 17, 2026
- *      Author: Moham
+- Description:
+- This header file contains the configuration structures, register bit-position
+- definitions, configuration macros, and public function prototypes for the SPI
+- driver on the STM32F407 microcontroller.
+ *
+- @date    Nov 19, 2026
+- @author  Mohamed Ali, Lihiouel
  */
 
 #ifndef STM32F407_SPI_DRIVER_H_
 #define STM32F407_SPI_DRIVER_H_
-
 
 #include "stm32f407.h"
 
@@ -56,15 +60,44 @@ typedef struct
  */
 typedef struct
 {
-	SPI_Registers_t *pSPIx_StartAddr; /*!< Base address of the SPI peripheral (e.g., SPI1, SPI2). */
-    SPI_Config_t SPI_Config;          /*!< Configuration parameters for the selected SPI peripheral. */
+    SPI_Registers_t *pSPIx_StartAddr; /*!< Base address of the SPI peripheral (e.g., SPI1, SPI2). */
+    SPI_Config_t     SPI_Config;      /*!< Configuration parameters for the selected SPI peripheral. */
+    uint8_t         *pTxBuffer;       /*!< Pointer to the application transmit buffer. */
+    uint8_t         *pRxBuffer;       /*!< Pointer to the application receive buffer. */
+    uint32_t         TxLen;           /*!< Remaining number of bytes to transmit. */
+    uint32_t         RxLen;           /*!< Remaining number of bytes to receive. */
+    uint8_t          TxState;         /*!< Current transmission state (@ref SPI_states). */
+    uint8_t          RxState;         /*!< Current reception state (@ref SPI_states). */
 } SPI_Hndl_t;
 
 /******************************************************************************
  * Macros
  ******************************************************************************/
 
-/* SPI_CR1 Register Bit Position Definitions */
+/**
+ * @defgroup SPI_states SPI Application States
+ * @brief Possible runtime states of the SPI transmit and receive state machines.
+ * @{
+ */
+#define SPI_READY                   0U  /*!< SPI peripheral is ready for a new transfer. */
+#define SPI_BUSY_IN_RX              1U  /*!< SPI peripheral is busy receiving data.      */
+#define SPI_BUSY_IN_TX              2U  /*!< SPI peripheral is busy transmitting data.   */
+/** @} */
+
+/**
+ * @defgroup SPI_events SPI Application Events
+ * @brief Event identifiers passed to the asynchronous application callback.
+ * @{
+ */
+#define SPI_EVENT_TX_CMPLT          1U  /*!< Transmission complete event. */
+#define SPI_EVENT_RX_CMPLT          2U  /*!< Reception complete event.    */
+#define SPI_EVENT_OVR_ERR           3U  /*!< Overrun error event.         */
+#define SPI_EVENT_CRC_ERR           4U  /*!< CRC error event.             */
+/** @} */
+
+/*------------------------------------------------------------------------------
+ * SPI_CR1 Register Bit Position Definitions
+ *----------------------------------------------------------------------------*/
 #define SPI_CR1_CPHA        (0U)   /*!< Clock Phase */
 #define SPI_CR1_CPOL        (1U)   /*!< Clock Polarity */
 #define SPI_CR1_MSTR        (2U)   /*!< Master Selection */
@@ -189,8 +222,9 @@ typedef struct
  * @brief Public functions provided by the SPI driver.
  *
  * @details
- * The API provides SPI initialisation, peripheral clock control,
- * Send/receive SPI Data, and interrupt configuration and handling.
+ * The API provides SPI initialization, peripheral clock control,
+ * blocking and interrupt-driven data transfer, peripheral control,
+ * and NVIC/SPI interrupt configuration and handling.
  * @{
  */
 /******************************************************************************
@@ -207,16 +241,19 @@ extern void SPI_PeriClkCtrl(SPI_Registers_t *pSPIx, uint8_t EnOrDi);
 
 
 /******************************************************************************
- * SPI Send and Receive
+ * SPI Send and Receive (Blocking & Interrupt-Driven)
  ******************************************************************************/
 extern void SPI_SendData(SPI_Registers_t *pSPIx, uint8_t *pTxBuff, uint32_t Length);
 extern void SPI_ReceiveData(SPI_Registers_t *pSPIx, uint8_t *pRxBuff, uint32_t Length);
+extern uint8_t SPI_SendDataIT(SPI_Hndl_t *pSPIHandle, uint8_t *pTxBuff, uint32_t Length);
+extern uint8_t SPI_ReceiveDataIT(SPI_Hndl_t *pSPIHandle, uint8_t *pRxBuff, uint32_t Length);
 
 /******************************************************************************
- * SPI Peripheral Control: Enable/Disable
+ * SPI Peripheral Control: Enable/Disable & Slave Select
  ******************************************************************************/
 extern void SPI_PeripheralCtrl(SPI_Registers_t *pSPIx, uint8_t EnOrDi);
 extern void SPI_SSIConfig(SPI_Registers_t *pSPIx, uint8_t EnOrDi);
+extern void SPI_SSOEConfig(SPI_Registers_t *pSPIx, uint8_t EnOrDi);
 
 /******************************************************************************
  * SPI Interrupt Configuration and Handling
