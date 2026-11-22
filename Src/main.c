@@ -20,10 +20,13 @@
 
 #include "app_spi_master_tx.h"
 #include "app_spi_interrupt.h"
+#include "app_i2c_mst_tx_slv_rx.h"
+#include "app_i2c_it_mst_tx_slv_rx.h"
 #include "stm32f407_LedToggle_ButtonB1.h"
 #include "stm32f407_LedToggle_ButtonB1_Interupt.h"
 #include "stm32f407_GPIO_driver.h"
 #include "stm32f407_SPI_driver.h"
+#include "stm32f407_I2C_driver.h"
 
 /**
  * @brief  Application entry point.
@@ -38,6 +41,7 @@ int main(void)
 #if ((STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON) || (STM32F407_LEDTOGGLE_BUTTONB1_INTERUPT == STD_ON))
     GPIO_ConfigAll();
 #endif
+
 
     /*
      * SPI master transmit application:
@@ -61,6 +65,11 @@ int main(void)
     SPI_Int_ConfigAll();
 #endif
 
+#if((APP_I2C_MST_TX_SLV_RX == STD_ON) || (APP_I2C_IT_MST_TX_SLV_RX == STD_ON))
+    I2C_ConfigGPIOPins();
+    I2C_ConfigAll();
+#endif
+
     /* Main application loop: keep the MCU running. */
     while (1)
     {
@@ -71,13 +80,21 @@ int main(void)
 	 */
 	SPI_Int_MasterSendData();
 #endif
-        /*
-         * Check the button state and toggle the LED when the polling-based
-         * LED/button application is enabled.
-         * This function call is currently commented out.
-         */
+	/*
+	 * Check the button state and toggle the LED when the polling-based
+	 * LED/button application is enabled.
+	 * This function call is currently commented out.
+	 */
 #if (STM32F407_LEDTOGGLE_BUTTONB1 == STD_ON)
-        Button_CheckAndToggleLED();
+	Button_CheckAndToggleLED();
+#endif
+
+#if(APP_I2C_MST_TX_SLV_RX == STD_ON)
+	I2C_MasterTx_SlaveRx();
+#endif
+
+#if(APP_I2C_IT_MST_TX_SLV_RX == STD_ON)
+	I2C_IT_MasterTx_SlaveRx();
 #endif
     }
 }
