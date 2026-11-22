@@ -28,3 +28,20 @@
 	- Implemented interrupt-driven SPI transmission and reception, including centralized interrupt handling and error management.
 	- Added an SPI application demonstrating asynchronous master communication triggered by a push button, with LED-based error indication.
 	- Integrated the SPI interrupt application into the main project and performed related code and project structure updates.
+
+## CP5 – I2C driver with master TX and slave RX
+	Add I2C driver header and initialization:
+	- Add the I2C configuration and handle structures, register definitions, flag  masks, states and event codes. 
+	- Implement initialization, de-initialization, clock control and peripheral enable.
+
+	Add blocking I2C master transmit:
+	- Implement polling master transmission with NACK, bus-error and timeout detection and optional repeated start. Add ACK control.
+
+	Add interrupt-driven I2C master transmit and slave receive:
+	- Implement interrupt-driven master transmission and slave reception, event and error handling, NVIC configuration and an application callback.
+
+	Add I2C test applications:
+	- Add test applications for polling and interrupt master transmit. 
+	- I2C1 sends to I2C3 on the same board; the transfer is started with the user button and verified with logic analyzer.
+
+	
