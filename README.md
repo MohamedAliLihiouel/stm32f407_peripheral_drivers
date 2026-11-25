@@ -44,4 +44,20 @@
 	- Add test applications for polling and interrupt master transmit. 
 	- I2C1 sends to I2C3 on the same board; the transfer is started with the user button and verified with logic analyzer.
 
-	
+## CP6 – USART driver with interrupt-driven TX/RX
+	Add RCC clock driver:
+	- Calculate the APB1 and APB2 peripheral clock from the clock source and the AHB/APB prescalers. Used by the I2C and USART drivers.
+
+	Add USART driver header and initialization:
+	- Add the USART configuration and handle structures, register bit definitions, flag masks, states and event codes.
+	- Implement initialization, de-initialization, clock control, peripheral enable, baud rate calculation and flag status/clear.
+
+	Add blocking USART transmit and receive:
+	- Implement polling transmission and reception with 8-bit and 9-bit frames and optional parity.
+
+	Add interrupt-driven USART transmit and receive:
+	- Implement interrupt-driven transmission and reception, split interrupt handling for TC, TXE, RXNE and error flags, NVIC configuration and an application callback.
+
+	Add USART test applications:
+	- Polling and interrupt test applications: USART2 sends a text to USART3 on the same board.
+	- With interrupts, USART3 sends the received text back to USART2 in reversed order. The result is checked in the debugger.
