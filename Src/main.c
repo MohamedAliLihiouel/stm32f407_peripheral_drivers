@@ -24,9 +24,12 @@
 #include "app_i2c_it_mst_tx_slv_rx.h"
 #include "stm32f407_LedToggle_ButtonB1.h"
 #include "stm32f407_LedToggle_ButtonB1_Interupt.h"
+#include "app_usart_pol_tx_rx.h"
+#include "app_usart_it_tx_rx.h"
 #include "stm32f407_GPIO_driver.h"
 #include "stm32f407_SPI_driver.h"
 #include "stm32f407_I2C_driver.h"
+#include "stm32f407_USART_driver.h"
 
 /**
  * @brief  Application entry point.
@@ -70,6 +73,11 @@ int main(void)
     I2C_ConfigAll();
 #endif
 
+#if((APP_USART_POL_TX_RX == STD_ON) || (APP_USART_IT_TX_RX == STD_ON))
+    USART_ConfigGPIOPins();
+    USART_ConfigAll();
+#endif
+
     /* Main application loop: keep the MCU running. */
     while (1)
     {
@@ -96,5 +104,14 @@ int main(void)
 #if(APP_I2C_IT_MST_TX_SLV_RX == STD_ON)
 	I2C_IT_MasterTx_SlaveRx();
 #endif
+
+#if(APP_USART_POL_TX_RX == STD_ON)
+	USART_PollingTx_Rx();
+#endif
+
+#if(APP_USART_IT_TX_RX == STD_ON)
+	USART_InterruptTx_Rx();
+#endif
+
     }
 }
