@@ -13,7 +13,7 @@
  * @note    Register addresses and structure layouts must match the target
  *          device and the STM32F4 reference manual, RM0090.
  *
- * @date    Oct 16, 2026
+ * @date    Nov 25, 2026
  * @author  Mohamed Ali Lihiouel, Embedded Software Engineer
  */
 
@@ -99,8 +99,13 @@
 #define IRQ_NO_I2C2_ER        34U /*!< I2C2 error interrupt. */
 #define IRQ_NO_SPI1           35U /*!< SPI1 global interrupt. */
 #define IRQ_NO_SPI2           36U /*!< SPI2 global interrupt. */
+#define IRQ_NO_USART1         37U /*!< USART1  global interrupt. */
+#define IRQ_NO_USART2         38U /*!< USART2  global interrupt. */
+#define IRQ_NO_USART3         39U /*!< USART3  global interrupt. */
 #define IRQ_NO_EXTI15_10      40U /*!< Shared interrupt for EXTI lines 10-15. */
 #define IRQ_NO_SPI3           51U /*!< SPI3 global interrupt. */
+#define IRQ_NO_I2C3_EV        72U /*!< I2C3 event interrupt. */
+#define IRQ_NO_I2C3_ER        73U /*!< I2C3 error interrupt. */
 
 /** @} */
 
@@ -232,7 +237,7 @@
 #define GPIOJ_START_ADDRESS  (AHB1_START_ADDRESS + GPIOJ_OFFSET)
 
 // GPIOK
-#define GPIOK_OFFSET         0x000028000UL
+#define GPIOK_OFFSET         0x00002800UL
 #define GPIOK_START_ADDRESS  (AHB1_START_ADDRESS + GPIOK_OFFSET)
 
 // Reset and clock control (RCC).
@@ -260,47 +265,47 @@
 
 // SPI2
 #define SPI2_OFFSET          0x00003800UL
-#define SPI2_START_ADDRESS   APB1_START_ADDRESS + SPI2_OFFSET
+#define SPI2_START_ADDRESS   (APB1_START_ADDRESS + SPI2_OFFSET)
 
 // SPI3
 #define SPI3_OFFSET          0x00003C00UL
-#define SPI3_START_ADDRESS   APB1_START_ADDRESS + SPI3_OFFSET
+#define SPI3_START_ADDRESS   (APB1_START_ADDRESS + SPI3_OFFSET)
 
 // USART2
 #define USART2_OFFSET        0x00004400UL
-#define USART2_START_ADDRESS APB1_START_ADDRESS + USART2_OFFSET
+#define USART2_START_ADDRESS (APB1_START_ADDRESS + USART2_OFFSET)
 
 // USART3
 #define USART3_OFFSET        0x00004800UL
-#define USART3_START_ADDRESS APB1_START_ADDRESS + USART3_OFFSET
+#define USART3_START_ADDRESS (APB1_START_ADDRESS + USART3_OFFSET)
 
 // UART4
 #define UART4_OFFSET         0x00004C00UL
-#define UART4_START_ADDRESS  APB1_START_ADDRESS + UART4_OFFSET
+#define UART4_START_ADDRESS  (APB1_START_ADDRESS + UART4_OFFSET)
 
 // UART5
 #define UART5_OFFSET         0x00005000UL
-#define UART5_START_ADDRESS  APB1_START_ADDRESS + UART5_OFFSET
+#define UART5_START_ADDRESS  (APB1_START_ADDRESS + UART5_OFFSET)
 
 // I2C1
 #define I2C1_OFFSET          0x00005400UL
-#define I2C1_START_ADDRESS   APB1_START_ADDRESS + I2C1_OFFSET
+#define I2C1_START_ADDRESS   (APB1_START_ADDRESS + I2C1_OFFSET)
 
 // I2C2
 #define I2C2_OFFSET          0x00005800UL
-#define I2C2_START_ADDRESS   APB1_START_ADDRESS + I2C2_OFFSET
+#define I2C2_START_ADDRESS   (APB1_START_ADDRESS + I2C2_OFFSET)
 
 // I2C3
 #define I2C3_OFFSET          0x00005C00UL
-#define I2C3_START_ADDRESS   APB1_START_ADDRESS + I2C3_OFFSET
+#define I2C3_START_ADDRESS   (APB1_START_ADDRESS + I2C3_OFFSET)
 
 // CAN1
 #define CAN1_OFFSET          0x00006400UL
-#define CAN1_START_ADDRESS   APB1_START_ADDRESS + CAN1_OFFSET
+#define CAN1_START_ADDRESS   (APB1_START_ADDRESS + CAN1_OFFSET)
 
 // CAN2
 #define CAN2_OFFSET          0x00006800UL
-#define CAN2_START_ADDRESS   APB1_START_ADDRESS + CAN2_OFFSET
+#define CAN2_START_ADDRESS   (APB1_START_ADDRESS + CAN2_OFFSET)
 
 /** @} */
 
@@ -323,19 +328,19 @@
 
 // USART1
 #define USART1_OFFSET        0x00001000UL
-#define USART1_START_ADDRESS APB2_START_ADDRESS + USART1_OFFSET
+#define USART1_START_ADDRESS (APB2_START_ADDRESS + USART1_OFFSET)
 
 // USART6
 #define USART6_OFFSET        0x00001400UL
-#define USART6_START_ADDRESS APB2_START_ADDRESS + USART6_OFFSET
+#define USART6_START_ADDRESS (APB2_START_ADDRESS + USART6_OFFSET)
 
 // SPI1
 #define SPI1_OFFSET          0x00003000UL
-#define SPI1_START_ADDRESS   APB2_START_ADDRESS + SPI1_OFFSET
+#define SPI1_START_ADDRESS   (APB2_START_ADDRESS + SPI1_OFFSET)
 
 // SPI4
 #define SPI4_OFFSET          0x00003400UL
-#define SPI4_START_ADDRESS   APB2_START_ADDRESS + SPI4_OFFSET
+#define SPI4_START_ADDRESS   (APB2_START_ADDRESS + SPI4_OFFSET)
 
 // System configuration controller (SYSCFG).
 #define SYSCFG_OFFSET        0x00003800UL
@@ -431,9 +436,9 @@ typedef struct
                                         Offset: 0x14. */
     volatile uint32_t AHB3RSTR;    /*!< AHB3 peripheral reset register.
                                         Offset: 0x18. */
+    uint32_t reserved0;            /*!< Reserved. Offset: 0x1C. */
     volatile uint32_t APB1RSTR;    /*!< APB1 peripheral reset register.
-                                        Offset: 0x1C. */
-    uint32_t reserved0;            /*!< Reserved. Offset: 0x20. */
+                                        Offset: 0x20. */
     volatile uint32_t APB2RSTR;    /*!< APB2 peripheral reset register.
                                         Offset: 0x24. */
     uint32_t reserved1[2];         /*!< Reserved. Offsets: 0x28-0x2C. */
@@ -567,6 +572,29 @@ typedef struct
     uint16_t reserved9;         /*!< Reserved. Offset: 0x26. */
 } I2C_Registers_t;
 
+/**
+ * @brief USART peripheral register layout.
+ *
+ * @details
+ * Represents the memory-mapped registers of an USART peripheral on the
+ * STM32F407. The registers are arranged according to their hardware offsets.
+ *
+ * The structure provides access to the USART status, data, baud rate, control and
+ * guard time registers. The members follow the register offsets defined by the
+ * hardware reference manual (RM0090).
+ *
+ * @note Register offsets are relative to the USART peripheral base address.
+ */
+typedef struct
+{
+    volatile uint32_t SR;      /*!< USART status register. Offset: 0x00. */
+    volatile uint32_t DR;      /*!< USART Data register. Offset: 0x04. */
+    volatile uint32_t BRR;     /*!< USART Baud rate register. Offset: 0x08. */
+    volatile uint32_t CR1;     /*!< USART control register 1. Offset: 0x0C. */
+    volatile uint32_t CR2;     /*!< USART control register 2. Offset: 0x10. */
+    volatile uint32_t CR3;     /*!< USART control register 3. Offset: 0x14. */
+    volatile uint32_t GTPR;    /*!< USART Guard time and prescaler register. Offset: 0x18. */
+} USART_Registers_t;
 
 /** @} */
 
@@ -594,29 +622,35 @@ typedef struct
 #define RCC    ((RCC_Registers_t*)RCC_START_ADDRESS)
 
 // GPIO peripherals.
-#define GPIOA  (GPIO_Registers_t*)(GPIOA_START_ADDRESS)
-#define GPIOB  (GPIO_Registers_t*)(GPIOB_START_ADDRESS)
-#define GPIOC  (GPIO_Registers_t*)(GPIOC_START_ADDRESS)
-#define GPIOD  (GPIO_Registers_t*)(GPIOD_START_ADDRESS)
-#define GPIOE  (GPIO_Registers_t*)(GPIOE_START_ADDRESS)
-#define GPIOF  (GPIO_Registers_t*)(GPIOF_START_ADDRESS)
-#define GPIOG  (GPIO_Registers_t*)(GPIOG_START_ADDRESS)
-#define GPIOH  (GPIO_Registers_t*)(GPIOH_START_ADDRESS)
-#define GPIOI  (GPIO_Registers_t*)(GPIOI_START_ADDRESS)
-#define GPIOJ  (GPIO_Registers_t*)(GPIOJ_START_ADDRESS)
-#define GPIOK  (GPIO_Registers_t*)(GPIOK_START_ADDRESS)
+#define GPIOA  ((GPIO_Registers_t*)(GPIOA_START_ADDRESS))
+#define GPIOB  ((GPIO_Registers_t*)(GPIOB_START_ADDRESS))
+#define GPIOC  ((GPIO_Registers_t*)(GPIOC_START_ADDRESS))
+#define GPIOD  ((GPIO_Registers_t*)(GPIOD_START_ADDRESS))
+#define GPIOE  ((GPIO_Registers_t*)(GPIOE_START_ADDRESS))
+#define GPIOF  ((GPIO_Registers_t*)(GPIOF_START_ADDRESS))
+#define GPIOG  ((GPIO_Registers_t*)(GPIOG_START_ADDRESS))
+#define GPIOH  ((GPIO_Registers_t*)(GPIOH_START_ADDRESS))
+#define GPIOI  ((GPIO_Registers_t*)(GPIOI_START_ADDRESS))
+#define GPIOJ  ((GPIO_Registers_t*)(GPIOJ_START_ADDRESS))
+#define GPIOK  ((GPIO_Registers_t*)(GPIOK_START_ADDRESS))
 
 // SPI peripherals
-#define SPI1 (SPI_Registers_t*)(SPI1_START_ADDRESS)
-#define SPI2 (SPI_Registers_t*)(SPI2_START_ADDRESS)
-#define SPI3 (SPI_Registers_t*)(SPI3_START_ADDRESS)
-#define SPI4 (SPI_Registers_t*)(SPI4_START_ADDRESS)
+#define SPI1 ((SPI_Registers_t*)(SPI1_START_ADDRESS))
+#define SPI2 ((SPI_Registers_t*)(SPI2_START_ADDRESS))
+#define SPI3 ((SPI_Registers_t*)(SPI3_START_ADDRESS))
+#define SPI4 ((SPI_Registers_t*)(SPI4_START_ADDRESS))
 
 
 // I2C peripherals
-#define I2C1 (I2C_Registers_t*)I2C1_START_ADDRESS
-#define I2C2 (I2C_Registers_t*)I2C2_START_ADDRESS
-#define I2C3 (I2C_Registers_t*)I2C3_START_ADDRESS
+#define I2C1 ((I2C_Registers_t*)(I2C1_START_ADDRESS))
+#define I2C2 ((I2C_Registers_t*)(I2C2_START_ADDRESS))
+#define I2C3 ((I2C_Registers_t*)(I2C3_START_ADDRESS))
+
+// USART peripherals
+#define USART1 ((USART_Registers_t*)(USART1_START_ADDRESS))
+#define USART2 ((USART_Registers_t*)(USART2_START_ADDRESS))
+#define USART3 ((USART_Registers_t*)(USART3_START_ADDRESS))
+#define USART6 ((USART_Registers_t*)(USART6_START_ADDRESS))
 
 /** @} */
 
@@ -860,7 +894,7 @@ typedef struct
  * The reset bit positions correspond to the SPI peripheral indices.
  */
 
-/* SPI peripheral reset macros. */
+/* USART peripheral reset macros. */
 #define RCC_SPI1_RESET()             \
     do {                                   \
         RCC->APB2RSTR |=  (1U << 12);      /* Assert reset */   \
@@ -918,6 +952,42 @@ typedef struct
 
 /** @} */
 
+/**
+ * @brief Generate a USART peripheral reset sequence through the RCC peripheral.
+ *
+ * @details
+ * Each reset macro asserts the corresponding APBx peripheral reset bit
+ * and then clears it to release the peripheral from reset.
+ *
+ * The reset bit positions correspond to the USART peripheral indices.
+ */
+
+/* SPI peripheral reset macros. */
+#define RCC_USART1_RESET()             \
+    do {                                   \
+        RCC->APB2RSTR |=  (1U << 4);      /* Assert reset */   \
+        RCC->APB2RSTR &= ~(1U << 4);      /* Release reset */  \
+    } while (0)
+
+#define RCC_USART2_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 17);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 17);      /* Release reset */  \
+    } while (0)
+
+#define RCC_USART3_RESET()             \
+    do {                                   \
+        RCC->APB1RSTR |=  (1U << 18);      /* Assert reset */   \
+        RCC->APB1RSTR &= ~(1U << 18);      /* Release reset */  \
+    } while (0)
+
+#define RCC_USART6_RESET()             \
+    do {                                   \
+        RCC->APB2RSTR |=  (1U << 5);      /* Assert reset */   \
+        RCC->APB2RSTR &= ~(1U << 5);      /* Release reset */  \
+    } while (0)
+
+/** @} */
 
 
 #endif /* INC_STM32F407_H_ */
